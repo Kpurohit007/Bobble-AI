@@ -1,12 +1,17 @@
-const sign_in_btn = document.querySelector("#sign-in-btn");
-const sign_up_btn = document.querySelector("#sign-up-btn");
+const signInBtn = document.querySelector("#sign-in-btn");
+const signUpBtn = document.querySelector("#sign-up-btn");
 const container = document.querySelector(".container");
+const passwordField = document.querySelector(".sign-up-form input[type='password']");
+const strengthWeak = document.getElementById("strength-weak");
+const strengthMedium = document.getElementById("strength-medium");
+const strengthStrong = document.getElementById("strength-strong");
 
-sign_up_btn.addEventListener("click", () => {
+// Event listeners for sign-in and sign-up buttons
+signUpBtn.addEventListener("click", () => {
   container.classList.add("sign-up-mode");
 });
 
-sign_in_btn.addEventListener("click", () => {
+signInBtn.addEventListener("click", () => {
   container.classList.remove("sign-up-mode");
 });
 
@@ -25,31 +30,25 @@ function togglePassword(fieldId, icon) {
 
 // Check password strength
 function checkPasswordStrength() {
-  const password = document.querySelector(
-    ".sign-up-form input[type='password']"
-  ).value;
-  const strengthWeak = document.getElementById("strength-weak");
-  const strengthMedium = document.getElementById("strength-medium");
-  const strengthStrong = document.getElementById("strength-strong");
-
+  const password = passwordField.value;
   let strength = 0;
 
   if (password.length >= 8) strength++;
-  if (password.match(/[A-Z]/)) strength++;
-  if (password.match(/[a-z]/)) strength++;
-  if (password.match(/[0-9]/)) strength++;
-  if (password.match(/[^a-zA-Z0-9]/)) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[a-z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[^a-zA-Z0-9]/.test(password)) strength++;
 
-  strengthWeak.className = "";
-  strengthMedium.className = "";
-  strengthStrong.className = "";
+  // Reset strength indicators
+  strengthWeak.classList.remove("weak");
+  strengthMedium.classList.remove("medium");
+  strengthStrong.classList.remove("strong");
 
-  if (strength >= 1) strengthWeak.className = "weak";
-  if (strength >= 3) strengthMedium.className = "medium";
-  if (strength >= 5) strengthStrong.className = "strong";
+  // Update strength indicators based on strength
+  if (strength >= 1) strengthWeak.classList.add("weak");
+  if (strength >= 3) strengthMedium.classList.add("medium");
+  if (strength >= 5) strengthStrong.classList.add("strong");
 }
 
 // Call the checkPasswordStrength function on password input
-document
-  .querySelector(".sign-up-form input[type='password']")
-  .addEventListener("input", checkPasswordStrength);
+passwordField.addEventListener("input", checkPasswordStrength);
